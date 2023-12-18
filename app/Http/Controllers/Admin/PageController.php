@@ -16,11 +16,17 @@ class PageController extends Controller
     }
 
     public function create() {
-        return view('admin.pages.create');
+        $pages = Page::where('slug', '!=', '/')->get();
+        return view('admin.pages.create',compact('pages'));
     }
 
     public function store(StoreRequest $request) {
         $data = $request->validated();
+        if (!empty($data['parent_id'])) {
+            $pageUrl = Page::whereId($data['parent_id'])->first('slug');
+            if (!$pageUrl) return redirect()->back()->with('error', 'Не найдена родительская страница');
+            $data['slug'] = $pageUrl->slug. '/'. $data['slug'];
+        }
         if (file_exists('../resources/views/pages/'.$data['filename'].'.blade.php')) return redirect()->back()->with('error', 'Такой файл уже есть');
         $newFile = file_put_contents('../resources/views/pages/'.$data['filename'].'.blade.php', $data['fileContent']);
         if (!$newFile) return redirect()->back()->with('error', 'Ошибка при создании файла.');
@@ -32,11 +38,17 @@ class PageController extends Controller
 
     public function edit(Page $page) {
         $fileContent = file_get_contents('../resources/views/pages/'.$page->filename.'.blade.php');
-        return view('admin.pages.edit', compact('page', 'fileContent'));
+        $pages = Page::where('id', '!=', $page->id)->where('slug', '!=', '/')->get();
+        return view('admin.pages.edit', compact('page','pages', 'fileContent'));
     }
 
     public function update(UpdateRequest $request, Page $page) {
         $data = $request->validated();
+        if (!empty($data['parent_id'])) {
+            $pageUrl = Page::whereId($data['parent_id'])->first('slug');
+            if (!$pageUrl) return redirect()->back()->with('error', 'Не найдена родительская страница');
+            $data['slug'] = $pageUrl->slug. '/'. $data['slug'];
+        }
         if ($data['filename'] != $page->filename) {
             if (file_exists('../resources/views/pages/'.$page->filename.'.blade.php')) unlink('../resources/views/pages/'.$page->filename.'.blade.php');
             $newFile = file_put_contents('../resources/views/pages/'.$data['filename'].'.blade.php', $data['fileContent']);
@@ -50,5 +62,12 @@ class PageController extends Controller
         $updatedPage = $page->update($data);
         if (!$updatedPage) return redirect()->back()->with('error', 'Ошибка при создании страницы');
         return redirect()->back()->with('success', 'Страница успешно обновлена');
+    }
+
+    public function delete(Page $page) {
+        Page::where('parent_id', '=', $page->id)->update(['parent_id' => null]);
+        $page->delete();
+        unlink('../resources/views/pages/'.$page->filename.'.blade.php');
+        return redirect()->back()->with('success', 'Страница успешно удалена');
     }
 }

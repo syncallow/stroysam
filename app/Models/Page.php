@@ -11,4 +11,8 @@ class Page extends Model
     use HasFactory, SoftDeletes;
 
     protected $guarded = false;
+
+    public function getParentAttribute() {
+        return Page::whereId($this->parent_id)->first();
+    }
 }

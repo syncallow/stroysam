@@ -296,6 +296,19 @@
     @if(session('success'))
         toastr.success('{{ session('success') }}')
     @endif
+
+    // Создание новой страницы работа с URL
+    @if(Route::is('admin.pages.create') || Route::is('admin.pages.edit'))
+        let pages = @php echo json_encode($pages); @endphp;
+    $('#parent_id').change(function (){
+            let selectedId = $('#parent_id').val()
+            let selectedPage = pages.find( function (page) {
+                return page.id == selectedId;
+            });
+        if (!selectedPage) return $('#parent_slug').text('/');
+        $('#parent_slug').text(selectedPage.slug + '/');
+    });
+    @endif
 </script>
 </body>
 </html>

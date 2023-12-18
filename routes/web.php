@@ -29,6 +29,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function() {
       Route::post('/store', [\App\Http\Controllers\Admin\PageController::class, 'store'])->name('admin.pages.store');
       Route::get('/edit/{page}', [\App\Http\Controllers\Admin\PageController::class, 'edit'])->name('admin.pages.edit');
       Route::patch('/update/{page}', [\App\Http\Controllers\Admin\PageController::class, 'update'])->name('admin.pages.update');
+      Route::delete('/delete/{page}', [\App\Http\Controllers\Admin\PageController::class, 'delete'])->name('admin.pages.delete');
    });
 
     Route::group(['prefix' => 'layouts'], function() {
@@ -57,4 +58,4 @@ Route::middleware('auth')->group(function () {
 
 require __DIR__.'/auth.php';
 
-Route::get('{page:slug?}', [\App\Http\Controllers\Page\PageController::class, 'index'])->name('page.index');
+Route::get('{slug?}', [\App\Http\Controllers\Page\PageController::class, 'index'])->where('slug', '.*')->name('page.index');

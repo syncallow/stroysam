@@ -26,7 +26,9 @@ class UpdateRequest extends FormRequest
         return [
             'id' => 'required|integer|exists:pages,id',
             'filename' => ['required','string',Rule::unique('pages')->ignore($this->id)],
-            'slug' => ['required','string',Rule::unique('pages')->ignore($this->id)],
+            'slug' => ['required','string',Rule::unique('pages')->ignore($this->id), 'not_regex:/\//'],
+            'alias' => ['required','string',Rule::unique('pages')->ignore($this->id)],
+            'parent_id' => 'nullable|string|exists:pages,id',
             'title' => 'required|string',
             'content' => 'required|string',
             'fileContent' => 'required|string'

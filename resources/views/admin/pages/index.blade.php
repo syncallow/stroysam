@@ -21,7 +21,9 @@
                             <th>ID</th>
                             <th>Название файлы</th>
                             <th>Slug</th>
+                            <th>Алиас</th>
                             <th>Title</th>
+                            <th>Родительская страница</th>
                             <th>Действия</th>
                         </tr>
                         </thead>
@@ -31,10 +33,17 @@
                             <td>{{ $page->id }}</td>
                             <td>{{$page->filename}}</td>
                             <td>{{ $page->slug }}</td>
+                            <td>{{ $page->alias }}</td>
                             <td>{{ $page->title }}</td>
+                            <td>{{ $page->Parent ? $page->Parent->title : 'Нету' }}</td>
                             <td>
+                                <a target="_blank" href="{{ route('page.index', $page->slug) }}" class="btn btn-primary">View</a>
                                 <a href="{{ route('admin.pages.edit', $page->id) }}" class="btn btn-success">Edit</a>
-                                <a href="#" class="btn btn-danger">Delete</a>
+                                <a href="#" onclick="event.preventDefault(); document.getElementById('delPage_{{ $page->id }}').submit()" class="btn btn-danger">Delete</a>
+                                <form action="{{ route('admin.pages.delete', $page->id) }}" id="delPage_{{ $page->id }}" method="post">
+                                    @csrf
+                                    @method('DELETE')
+                                </form>
                             </td>
                         </tr>
                         @endforeach

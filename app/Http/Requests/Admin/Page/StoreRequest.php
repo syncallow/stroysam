@@ -24,7 +24,9 @@ class StoreRequest extends FormRequest
 
         return [
             'filename' => 'required|string|unique:pages',
-            'slug' => 'required|string|unique:pages',
+            'slug' => 'required|string|unique:pages|not_regex:/\//',
+            'alias' => 'required|string|unique:pages',
+            'parent_id' => 'nullable|integer|exists:pages,id',
             'title' => 'required|string',
             'content' => 'required|string',
             'fileContent' => 'required|string'
