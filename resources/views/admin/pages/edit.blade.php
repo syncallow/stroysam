@@ -27,7 +27,7 @@
                                 <div class="input-group-prepend">
                                     <span class="input-group-text" id="parent_slug">{{ $page->Parent ? $page->Parent->slug.'/' : '/' }}</span>
                                 </div>
-                                <input type="text" name="slug" class="form-control" id="slug" placeholder="slug" value="{{ $page->Parent ? str_replace($page->Parent->slug. '/', '', $page->slug) : $page->slug }}"  required>
+                                <input type="text" name="slug" class="form-control" id="slug" placeholder="slug" value="{{ $page->Parent ? $page->FormatSlug : $page->slug }}"  required>
                                 @error('slug')
                                 <p class="text-danger"> {{ $message }}</p>
                                 @enderror

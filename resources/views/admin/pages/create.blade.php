@@ -63,7 +63,7 @@
                         </div>
                         <div class="form-group">
                             <label for="content">Контент(*)</label>
-                            <textarea class="w-100" id="content" name="content" required></textarea>
+                            <textarea class="w-100" id="content" name="content"></textarea>
                             @error('content')
                             <p class="text-danger"> {{ $message }}</p>
                             @enderror

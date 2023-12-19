@@ -15,4 +15,10 @@ class Page extends Model
     public function getParentAttribute() {
         return Page::whereId($this->parent_id)->first();
     }
+
+    public function getFormatSlugAttribute() {
+        $segments = explode('/', $this->slug);
+        $lastSegment = array_pop($segments);
+        return $lastSegment;
+    }
 }
