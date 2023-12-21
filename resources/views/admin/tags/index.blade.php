@@ -50,7 +50,10 @@
                             </tbody>
                         </table>
                     </div>
-
+                    <div class="card-footer">
+                        {{ $tags->links('pagination::bootstrap-4') }}
+                    </div>
+                </div>
                 </div>
 
             </div>

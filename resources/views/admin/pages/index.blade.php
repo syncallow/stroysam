@@ -52,7 +52,7 @@
                 </div>
                 <!-- /.card-body -->
                 <div class="card-footer">
-
+                    {{ $pages->links('pagination::bootstrap-4') }}
                 </div>
             </div>
             <!-- /.card -->
