@@ -6,7 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\Page\StoreRequest;
 use App\Http\Requests\Admin\Page\UpdateRequest;
 use App\Models\Page;
+use App\Models\Tag;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class PageController extends Controller
 {
@@ -22,6 +24,21 @@ class PageController extends Controller
 
     public function store(StoreRequest $request) {
         $data = $request->validated();
+        $tags = explode(', ', $data['meta_keywords']);
+
+        foreach ($tags as $tag) {
+            $existTag = Tag::where('title', $tag)->first();
+
+            if (!$existTag) {
+                Tag::create([
+                    'title' => $tag,
+                    'slug' => Str::slug($tag, '-')
+                ]);
+            }
+        }
+
+        $existTags = Tag::whereIn('title', $tags)->pluck('id')->toArray();
+
         if (!empty($data['parent_id'])) {
             $pageUrl = Page::whereId($data['parent_id'])->first('slug');
             if (!$pageUrl) return redirect()->back()->with('error', 'Не найдена родительская страница');
@@ -33,6 +50,7 @@ class PageController extends Controller
         unset($data['fileContent']);
         $newPage = Page::create($data);
         if (!$newPage) return redirect()->back()->with('error', 'Ошибка при создании страницы');
+        $newPage->tags()->attach($existTags);
         return redirect()->route('admin.pages.index')->with('success', 'Страница успешно создана.');
     }
 
@@ -44,6 +62,22 @@ class PageController extends Controller
 
     public function update(UpdateRequest $request, Page $page) {
         $data = $request->validated();
+
+        $tags = explode(', ', $data['meta_keywords']);
+
+        foreach ($tags as $tag) {
+            $existTag = Tag::where('title', $tag)->first();
+
+            if (!$existTag) {
+                Tag::create([
+                    'title' => $tag,
+                    'slug' => Str::slug($tag, '-')
+                ]);
+            }
+        }
+
+        $existTags = Tag::whereIn('title', $tags)->pluck('id')->toArray();
+
         if (!empty($data['parent_id'])) {
             $pageUrl = Page::whereId($data['parent_id'])->first('slug');
             if (!$pageUrl) return redirect()->back()->with('error', 'Не найдена родительская страница');
@@ -61,11 +95,13 @@ class PageController extends Controller
 
         $updatedPage = $page->update($data);
         if (!$updatedPage) return redirect()->back()->with('error', 'Ошибка при создании страницы');
+        $page->tags()->sync($existTags);
         return redirect()->back()->with('success', 'Страница успешно обновлена');
     }
 
     public function delete(Page $page) {
         Page::where('parent_id', '=', $page->id)->update(['parent_id' => null]);
+        $page->tags()->detach();
         $page->delete();
         unlink('../resources/views/pages/'.$page->filename.'.blade.php');
         return redirect()->back()->with('success', 'Страница успешно удалена');

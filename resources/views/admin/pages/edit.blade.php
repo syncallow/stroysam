@@ -63,6 +63,10 @@
                             @enderror
                         </div>
                         <div class="form-group">
+                            <label for="meta_keywords">Мета Ключевые Слова</label>
+                            <textarea class="form-control" name="meta_keywords" id="meta_keywords" cols="30" rows="10">{{ $page->meta_keywords }}</textarea>
+                        </div>
+                        <div class="form-group">
                             <label for="content">Контент(*)</label>
                             <textarea class="w-100" id="content" name="content" required>{{ $page->content }}</textarea>
                             @error('content')

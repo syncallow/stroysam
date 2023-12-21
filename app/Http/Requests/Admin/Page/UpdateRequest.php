@@ -31,7 +31,8 @@ class UpdateRequest extends FormRequest
             'parent_id' => 'nullable|string|exists:pages,id',
             'title' => 'required|string',
             'content' => 'required|string',
-            'fileContent' => 'required|string'
+            'fileContent' => 'required|string',
+            'meta_keywords' => 'nullable|string'
         ];
     }
 }

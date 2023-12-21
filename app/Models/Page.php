@@ -21,4 +21,8 @@ class Page extends Model
         $lastSegment = array_pop($segments);
         return $lastSegment;
     }
+
+    public function tags() {
+        return $this->belongsToMany(Tag::class);
+    }
 }

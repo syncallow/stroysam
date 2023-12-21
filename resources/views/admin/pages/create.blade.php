@@ -52,6 +52,10 @@
                             @enderror
                         </div>
                         <div class="form-group">
+                            <label for="meta_keywords">Мета Ключевые Слова</label>
+                            <textarea class="form-control" name="meta_keywords" id="meta_keywords" cols="30" rows="10"></textarea>
+                        </div>
+                        <div class="form-group">
                             <label for="parent_id">Родительская страница</label>
 
                             <select class="form-control" name="parent_id" id="parent_id">

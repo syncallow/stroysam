@@ -48,6 +48,14 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function() {
         Route::patch('/update/{category}', [\App\Http\Controllers\Admin\CategoryController::class, 'update'])->name('admin.categories.update');
         Route::delete('/delete/{category}', [\App\Http\Controllers\Admin\CategoryController::class, 'delete'])->name('admin.categories.delete');
     });
+    Route::group(['prefix' => 'tags'], function() {
+        Route::get('/', [\App\Http\Controllers\Admin\TagController::class, 'index'])->name('admin.tags.index');
+        Route::get('/create', [\App\Http\Controllers\Admin\TagController::class, 'create'])->name('admin.tags.create');
+        Route::post('/store', [\App\Http\Controllers\Admin\TagController::class, 'store'])->name('admin.tags.store');
+        Route::get('/edit/{tag}', [\App\Http\Controllers\Admin\TagController::class, 'edit'])->name('admin.tags.edit');
+        Route::patch('/update/{tag}', [\App\Http\Controllers\Admin\TagController::class, 'update'])->name('admin.tags.update');
+        Route::delete('/delete/{tag}', [\App\Http\Controllers\Admin\TagController::class, 'delete'])->name('admin.tags.delete');
+    });
 });
 
 Route::middleware('auth')->group(function () {
@@ -58,4 +66,5 @@ Route::middleware('auth')->group(function () {
 
 require __DIR__.'/auth.php';
 
+Route::get('/tag/{slug}', [\App\Http\Controllers\Tag\TagController::class, 'index'])->name('tag.index');
 Route::get('{slug?}', [\App\Http\Controllers\Page\PageController::class, 'index'])->where('slug', '.*')->name('page.index');

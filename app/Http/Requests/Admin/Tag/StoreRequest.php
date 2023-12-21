@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests\Admin\Page;
+namespace App\Http\Requests\Admin\Tag;
 
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -23,14 +23,10 @@ class StoreRequest extends FormRequest
     {
 
         return [
-            'filename' => 'required|string|unique:pages',
-            'slug' => 'required|string|unique:pages|not_regex:/\//',
-            'alias' => 'required|string|unique:pages',
-            'parent_id' => 'nullable|integer|exists:pages,id',
-            'title' => 'required|string',
-            'content' => 'required|string',
-            'fileContent' => 'required|string',
-            'meta_keywords' => 'nullable|string'
+            'title' => 'required|string|unique:tags',
+            'slug' => 'required|string|unique:tags',
+            'page_ids' => 'nullable|array',
+            'page_ids.*' => 'nullable|integer|exists:pages,id'
         ];
     }
 }
