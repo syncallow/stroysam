@@ -5,7 +5,7 @@
     <div class="container mt-5">
         <div class="p-5">
             <div class="row gap-2">
-                @if(!$tags)
+                @if(!isset($tags))
 
                 @foreach($tag->pages as $page)
                 <div class="col-4">
