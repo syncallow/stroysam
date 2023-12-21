@@ -6,7 +6,7 @@
     <meta content="" name="keywords">
     <meta content="" name="description">
 
-    <title>{{ $page->title }}</title>
+    <title>{{ isset($page) ? $page->title : 'Laravel' }}</title>
 
     <!-- Google Web Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">

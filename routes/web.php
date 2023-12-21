@@ -66,5 +66,5 @@ Route::middleware('auth')->group(function () {
 
 require __DIR__.'/auth.php';
 
-Route::get('/tag/{slug}', [\App\Http\Controllers\Tag\TagController::class, 'index'])->name('tag.index');
+Route::get('/tag/{slug?}', [\App\Http\Controllers\Tag\TagController::class, 'index'])->name('tag.index');
 Route::get('{slug?}', [\App\Http\Controllers\Page\PageController::class, 'index'])->where('slug', '.*')->name('page.index');
